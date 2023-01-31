@@ -29,7 +29,8 @@ $bit_arr | % {[int]($_)} | Join-String | Out-File ids_exist.txt
 Read file contents (just made it as back-up for later, instead of having all the data in memory, which can be lost if the session closes unexpectedly). Then, convert to black or white patterns (these names come from ImageMagick).
 
 ```pwsh
-(Get-Content .\ids_exist.txt).ToCharArray() | % {$_ -eq '1' ? 'pattern:gray0' : 'pattern:gray100'} | Join-String -Separator ' ' | Set-Variable magick_pattern
+(Get-Content .\ids_exist.txt).ToCharArray() | % {$_ -eq '1' ? 'pattern:gray0' : 'pattern:gray100'} |
+Join-String -Separator ' ' | Set-Variable magick_pattern
 ```
 
 Make pattern and save. We're done!
@@ -59,10 +60,11 @@ magick montage -geometry +0+0 -tile 5000x8 -size 5x5 `@magick_patterns.txt show:
 This was the final command I used; it ran in the background, whilst I went to do other things in life and it notified me it was done by beeping.
 
 ```pwsh
-magick montage -geometry +0+0 -tile 250x -size 5x5 `@magick_patterns.txt out.png && [System.Console]::Beep(700, 1000)
+magick montage -geometry +0+0 -tile 250x -size 5x5 `@magick_patterns.txt out.png &&
+[System.Console]::Beep(700, 1000)
 ```
 
 The final image that I got out was what I wanted when I started:
-![binary map of PID distribution](./PowerShell Mini-Adventures/Binary Map/out.png)
+![binary map of PID distribution](https://github.com/L-Sva/adventures/blob/main/PowerShell%20Mini-Adventures/Binary%20Map/out.png)
 
 This shows the distribution of Windows Processes' PID from 0 to 35,749 (calculated from the max PID of 35,652 and rows of 250 values each). Note that the black squares show where there is a valid PID.
