@@ -5,7 +5,8 @@ As an extension to my Binary Map adventure, I wanted to show more details, rathe
 First, I looked into the code to get the max number of threads that any process was using, to adjust size of text in the final image.
 
 ```pwsh
-Get-Process | Select-Object Name, Id, @{Name='Thread Count'; Expression={$_.Threads.Count}} | Sort-Object -Property 'Thread Count' -Descending | Select-Object -First 20
+Get-Process | Select-Object Name, Id, @{Name='Thread Count'; Expression={$_.Threads.Count}} |
+Sort-Object -Property 'Thread Count' -Descending | Select-Object -First 20
 ```
 
 That code returned the following table:
@@ -39,7 +40,8 @@ So, max num of characters is 3 for thread count.
 This time round, I also wanted to include the origin of the program, e.g. showing MSEdge processes with the Edge icon.
 
 ```pwsh
-[System.Drawing.Icon]::ExtractAssociatedIcon('C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe') | Set-Variable edge_icon
+[System.Drawing.Icon]::ExtractAssociatedIcon('C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe') |
+Set-Variable edge_icon
 ```
 
 These codes download the program image from its exe file location.
@@ -52,8 +54,8 @@ $edge_icon.ToBitmap().Save("$(Get-Location)/edge_icon.ico")
 After some digging through, it seems that svchost is the most common process, but it often lacks the company tag.
 
 ```pwsh
-Get-Process | Sort-Object -Property Id | 
-Select-Object Id, Name, Company, Path, 
+Get-Process | Sort-Object -Property Id |
+Select-Object Id, Name, Company, Path,
 @{Name='Thread Count'; Expression={$_.Threads.Count}} |
 Select-Object -First 200 | ft
 ```
@@ -62,7 +64,7 @@ Therefore, to see if I had to manually add this info for more processes that rep
 
 ```pwsh
 Get-Process | Select-Object Name, Company |
-Group-Object -Property Name -NoElement | Sort-Object Count -Descending | 
+Group-Object -Property Name -NoElement | Sort-Object Count -Descending |
 Select-Object -First 5
 ```
 
@@ -108,7 +110,7 @@ I next installed all the icons that I would be using later on.
 
 ```pwsh
 New-Item -Type Directory -Force ./icons/
-$process_info | Where-Object {$_.Path} | 
+$process_info | Where-Object {$_.Path} |
 ForEach-Object {
     [System.Drawing.Icon]::ExtractAssociatedIcon($_.Path).
     ToBitmap().Save("$(Get-Location)/icons/$($_.Name).ico");
@@ -120,7 +122,10 @@ Also, I manually changed the icon only for svchost, because that one appeared th
 After some investigation in the Image Magick documention, I made a minimal working example of the code boilerplate:
 
 ```pwsh
-magick montage -font Verdana -pointsize 9 -geometry +0+0 -tile 250x pattern:gray0 pattern:gray100 pattern:gray0 `( ./icons/acrotray.ico[20x20] -gravity south -extent 24x28 -bordercolor red -border 4x2 -gravity north -annotate +0-1 '322' `) pattern:gray0 `( pattern:gray100[20x20] -gravity south -extent 24x28 -bordercolor blue -border 4x2 -gravity north -annotate +0-1 '196' `) show:
+magick montage -font Verdana -pointsize 9 -geometry +0+0 -tile 250x pattern:gray0 pattern:gray100 `
+pattern:gray0 `( ./icons/acrotray.ico[20x20] -gravity south -extent 24x28 -bordercolor red -border 4x2 `
+-gravity north -annotate +0-1 '322' `) pattern:gray0 `( pattern:gray100[20x20] -gravity south -extent 24x28 `
+-bordercolor blue -border 4x2 -gravity north -annotate +0-1 '196' `) show:
 ```
 
 I first created an array of white squares, which I would later index into to change individual Id positions.
@@ -174,7 +179,9 @@ Therefore, I changed the code to process a tenth of the original file at a time.
 
 ```pwsh
 New-Item -Type Directory magick_patterns_split -Force
-$i=0; Get-Content .\magick_patterns.txt -ReadCount 5000 | ForEach-Object {$i++; $_ | Out-File ".\magick_patterns_split\mp_$i.txt"}
+$i=0; Get-Content .\magick_patterns.txt -ReadCount 5000 | ForEach-Object {
+    $i++; $_ | Out-File ".\magick_patterns_split\mp_$i.txt"
+}
 ```
 
 Here, I use the Parallel flag on the ForEach-Object method to run these processes at once (not quite _all_ at once; only 5 by default run at the same time).
@@ -182,7 +189,8 @@ Here, I use the Parallel flag on the ForEach-Object method to run these processe
 ```pwsh
 New-Item -Type Directory intermediate -Force
 1..10 | ForEach-Object -Parallel {
-    magick montage -font Verdana -pointsize 9 -geometry +0+0 -tile 250x "`@magick_patterns_split/mp_$_.txt" "intermediate/out_$($_.ToString('00')).png"
+    magick montage -font Verdana -pointsize 9 -geometry +0+0 -tile 250x `
+    "`@magick_patterns_split/mp_$_.txt" "intermediate/out_$($_.ToString('00')).png"
 }
 ```
 
