@@ -7,7 +7,7 @@
 
 
 Montage of Results:
-<img src="https://github.com/L-Sva/adventures/blob/main/PowerShell%20Mini-Adventures/Binary%20Map/out.png" width=50% title="Binary map of PID distribution">
-<img src="https://github.com/L-Sva/adventures/blob/main/PowerShell%20Mini-Adventures/Binary%20Map%20Extended/all.png" width=50% title="Boxed Map showing Process details">
-
+<br/>
+<img src="https://github.com/L-Sva/adventures/blob/main/PowerShell%20Mini-Adventures/Binary%20Map/out.png" width=40% title="Binary map of PID distribution">
+<img src="https://github.com/L-Sva/adventures/blob/main/PowerShell%20Mini-Adventures/Binary%20Map%20Extended/all.png" width=40% title="Boxed Map showing Process details">
 
