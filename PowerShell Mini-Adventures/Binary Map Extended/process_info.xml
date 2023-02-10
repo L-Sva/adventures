@@ -1,0 +1,792 @@
+<Objs Version="1.1.0.1" xmlns="http://schemas.microsoft.com/powershell/2004/04">
+  <Obj RefId="0">
+    <TN RefId="0">
+      <T>System.Collections.Specialized.OrderedDictionary</T>
+      <T>System.Object</T>
+    </TN>
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">svchost</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\WINDOWS\system32\svchost.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="1">
+          <TN RefId="1">
+            <T>System.Object[]</T>
+            <T>System.Array</T>
+            <T>System.Object</T>
+          </TN>
+          <LST>
+            <I32>1012</I32>
+            <I32>1164</I32>
+            <I32>1260</I32>
+            <I32>1364</I32>
+            <I32>1672</I32>
+            <I32>1840</I32>
+            <I32>1848</I32>
+            <I32>1856</I32>
+            <I32>1920</I32>
+            <I32>1976</I32>
+            <I32>1988</I32>
+            <I32>2036</I32>
+            <I32>2064</I32>
+            <I32>2088</I32>
+            <I32>2180</I32>
+            <I32>2196</I32>
+            <I32>2224</I32>
+            <I32>2252</I32>
+            <I32>2340</I32>
+            <I32>2388</I32>
+            <I32>2392</I32>
+            <I32>2412</I32>
+            <I32>2500</I32>
+            <I32>2832</I32>
+            <I32>2872</I32>
+            <I32>2880</I32>
+            <I32>2924</I32>
+            <I32>2932</I32>
+            <I32>3076</I32>
+            <I32>3208</I32>
+            <I32>3216</I32>
+            <I32>3228</I32>
+            <I32>3288</I32>
+            <I32>3428</I32>
+            <I32>3472</I32>
+            <I32>3588</I32>
+            <I32>3776</I32>
+            <I32>3816</I32>
+            <I32>3872</I32>
+            <I32>3964</I32>
+            <I32>3972</I32>
+            <I32>4048</I32>
+            <I32>4336</I32>
+            <I32>4436</I32>
+            <I32>4464</I32>
+            <I32>4476</I32>
+            <I32>4488</I32>
+            <I32>4496</I32>
+            <I32>4560</I32>
+            <I32>4608</I32>
+            <I32>4652</I32>
+            <I32>4672</I32>
+            <I32>4780</I32>
+            <I32>4920</I32>
+            <I32>5024</I32>
+            <I32>5068</I32>
+            <I32>5132</I32>
+            <I32>5256</I32>
+            <I32>5260</I32>
+            <I32>5576</I32>
+            <I32>6316</I32>
+            <I32>7020</I32>
+            <I32>7452</I32>
+            <I32>8020</I32>
+            <I32>8336</I32>
+            <I32>8380</I32>
+            <I32>8532</I32>
+            <I32>9052</I32>
+            <I32>9092</I32>
+            <I32>9112</I32>
+            <I32>9788</I32>
+            <I32>9796</I32>
+            <I32>9892</I32>
+            <I32>10044</I32>
+            <I32>10168</I32>
+            <I32>10616</I32>
+            <I32>10668</I32>
+            <I32>10780</I32>
+            <I32>10932</I32>
+            <I32>11280</I32>
+            <I32>11532</I32>
+            <I32>11740</I32>
+            <I32>11776</I32>
+            <I32>11940</I32>
+            <I32>12124</I32>
+            <I32>12384</I32>
+            <I32>12608</I32>
+            <I32>12780</I32>
+            <I32>13296</I32>
+            <I32>14484</I32>
+            <I32>15104</I32>
+            <I32>16912</I32>
+            <I32>17140</I32>
+            <I32>18516</I32>
+            <I32>19308</I32>
+            <I32>20472</I32>
+            <I32>21368</I32>
+            <I32>22160</I32>
+            <I32>24344</I32>
+            <I32>24608</I32>
+            <I32>25224</I32>
+            <I32>27560</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="2">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>5</I32>
+            <I32>12</I32>
+            <I32>11</I32>
+            <I32>12</I32>
+            <I32>3</I32>
+            <I32>1</I32>
+            <I32>1</I32>
+            <I32>9</I32>
+            <I32>7</I32>
+            <I32>4</I32>
+            <I32>1</I32>
+            <I32>6</I32>
+            <I32>4</I32>
+            <I32>11</I32>
+            <I32>1</I32>
+            <I32>3</I32>
+            <I32>5</I32>
+            <I32>10</I32>
+            <I32>8</I32>
+            <I32>2</I32>
+            <I32>2</I32>
+            <I32>4</I32>
+            <I32>5</I32>
+            <I32>7</I32>
+            <I32>2</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>3</I32>
+            <I32>7</I32>
+            <I32>3</I32>
+            <I32>3</I32>
+            <I32>16</I32>
+            <I32>1</I32>
+            <I32>11</I32>
+            <I32>7</I32>
+            <I32>3</I32>
+            <I32>10</I32>
+            <I32>1</I32>
+            <I32>4</I32>
+            <I32>7</I32>
+            <I32>3</I32>
+            <I32>3</I32>
+            <I32>5</I32>
+            <I32>1</I32>
+            <I32>2</I32>
+            <I32>5</I32>
+            <I32>10</I32>
+            <I32>19</I32>
+            <I32>8</I32>
+            <I32>3</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>5</I32>
+            <I32>17</I32>
+            <I32>5</I32>
+            <I32>6</I32>
+            <I32>3</I32>
+            <I32>1</I32>
+            <I32>7</I32>
+            <I32>1</I32>
+            <I32>13</I32>
+            <I32>10</I32>
+            <I32>2</I32>
+            <I32>15</I32>
+            <I32>1</I32>
+            <I32>1</I32>
+            <I32>1</I32>
+            <I32>3</I32>
+            <I32>7</I32>
+            <I32>9</I32>
+            <I32>1</I32>
+            <I32>2</I32>
+            <I32>8</I32>
+            <I32>5</I32>
+            <I32>8</I32>
+            <I32>7</I32>
+            <I32>1</I32>
+            <I32>2</I32>
+            <I32>6</I32>
+            <I32>3</I32>
+            <I32>5</I32>
+            <I32>3</I32>
+            <I32>16</I32>
+            <I32>1</I32>
+            <I32>3</I32>
+            <I32>3</I32>
+            <I32>15</I32>
+            <I32>1</I32>
+            <I32>3</I32>
+            <I32>3</I32>
+            <I32>2</I32>
+            <I32>9</I32>
+            <I32>4</I32>
+            <I32>5</I32>
+            <I32>4</I32>
+            <I32>3</I32>
+            <I32>3</I32>
+            <I32>4</I32>
+            <I32>4</I32>
+            <I32>2</I32>
+            <I32>3</I32>
+            <I32>2</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="3">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">msedge</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="4">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>1048</I32>
+            <I32>2956</I32>
+            <I32>3320</I32>
+            <I32>3808</I32>
+            <I32>5476</I32>
+            <I32>5488</I32>
+            <I32>7012</I32>
+            <I32>8548</I32>
+            <I32>8852</I32>
+            <I32>8856</I32>
+            <I32>9436</I32>
+            <I32>9988</I32>
+            <I32>11096</I32>
+            <I32>13756</I32>
+            <I32>14396</I32>
+            <I32>15228</I32>
+            <I32>15388</I32>
+            <I32>15472</I32>
+            <I32>15548</I32>
+            <I32>15704</I32>
+            <I32>16100</I32>
+            <I32>16204</I32>
+            <I32>16328</I32>
+            <I32>16356</I32>
+            <I32>16460</I32>
+            <I32>18240</I32>
+            <I32>18296</I32>
+            <I32>18452</I32>
+            <I32>18712</I32>
+            <I32>18784</I32>
+            <I32>18984</I32>
+            <I32>20060</I32>
+            <I32>20908</I32>
+            <I32>21824</I32>
+            <I32>23616</I32>
+            <I32>23872</I32>
+            <I32>27448</I32>
+            <I32>27760</I32>
+            <I32>28308</I32>
+            <I32>28388</I32>
+            <I32>30160</I32>
+            <I32>31004</I32>
+            <I32>31452</I32>
+            <I32>32472</I32>
+            <I32>33592</I32>
+            <I32>33976</I32>
+            <I32>35340</I32>
+            <I32>35856</I32>
+            <I32>36524</I32>
+            <I32>36804</I32>
+            <I32>37640</I32>
+            <I32>37792</I32>
+            <I32>38584</I32>
+            <I32>41544</I32>
+            <I32>42180</I32>
+            <I32>43728</I32>
+            <I32>43796</I32>
+            <I32>45048</I32>
+            <I32>48036</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="5">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>8</I32>
+            <I32>18</I32>
+            <I32>8</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>18</I32>
+            <I32>20</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>19</I32>
+            <I32>17</I32>
+            <I32>19</I32>
+            <I32>9</I32>
+            <I32>18</I32>
+            <I32>21</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>78</I32>
+            <I32>17</I32>
+            <I32>14</I32>
+            <I32>17</I32>
+            <I32>8</I32>
+            <I32>17</I32>
+            <I32>8</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>19</I32>
+            <I32>12</I32>
+            <I32>17</I32>
+            <I32>18</I32>
+            <I32>17</I32>
+            <I32>18</I32>
+            <I32>18</I32>
+            <I32>18</I32>
+            <I32>49</I32>
+            <I32>17</I32>
+            <I32>18</I32>
+            <I32>12</I32>
+            <I32>19</I32>
+            <I32>13</I32>
+            <I32>17</I32>
+            <I32>21</I32>
+            <I32>12</I32>
+            <I32>18</I32>
+            <I32>24</I32>
+            <I32>11</I32>
+            <I32>17</I32>
+            <I32>9</I32>
+            <I32>20</I32>
+            <I32>20</I32>
+            <I32>29</I32>
+            <I32>18</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+            <I32>17</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="6">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">crashpad_handler</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <Obj N="Value" RefId="7">
+          <TN RefId="2">
+            <T>System.Management.Automation.PSCustomObject</T>
+            <T>System.Object</T>
+          </TN>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Program Files\Google\Drive File Stream\69.0.0.0\crashpad_handler.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="8">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>5528</I32>
+            <I32>9420</I32>
+            <I32>17156</I32>
+            <I32>17404</I32>
+            <I32>20616</I32>
+            <I32>21876</I32>
+            <I32>21960</I32>
+            <I32>27004</I32>
+            <I32>27556</I32>
+            <I32>27860</I32>
+            <I32>28052</I32>
+            <I32>29140</I32>
+            <I32>31308</I32>
+            <I32>31916</I32>
+            <I32>32544</I32>
+            <I32>32920</I32>
+            <I32>34380</I32>
+            <I32>34720</I32>
+            <I32>45128</I32>
+            <I32>47564</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="9">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>6</I32>
+            <I32>7</I32>
+            <I32>6</I32>
+            <I32>7</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>7</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+            <I32>6</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="10">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">RuntimeBroker</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Windows\System32\RuntimeBroker.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="11">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>12812</I32>
+            <I32>13196</I32>
+            <I32>15444</I32>
+            <I32>18800</I32>
+            <I32>22772</I32>
+            <I32>24472</I32>
+            <I32>37268</I32>
+            <I32>39456</I32>
+            <I32>39616</I32>
+            <I32>44624</I32>
+            <I32>46248</I32>
+            <I32>47520</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="12">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>3</I32>
+            <I32>20</I32>
+            <I32>2</I32>
+            <I32>1</I32>
+            <I32>1</I32>
+            <I32>1</I32>
+            <I32>9</I32>
+            <I32>12</I32>
+            <I32>1</I32>
+            <I32>3</I32>
+            <I32>2</I32>
+            <I32>1</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="13">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">Code</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Program Files\Microsoft VS Code\Code.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="14">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>4276</I32>
+            <I32>10436</I32>
+            <I32>12468</I32>
+            <I32>13148</I32>
+            <I32>13236</I32>
+            <I32>14392</I32>
+            <I32>27596</I32>
+            <I32>36660</I32>
+            <I32>37056</I32>
+            <I32>45752</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="15">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>8</I32>
+            <I32>15</I32>
+            <I32>12</I32>
+            <I32>44</I32>
+            <I32>14</I32>
+            <I32>31</I32>
+            <I32>14</I32>
+            <I32>8</I32>
+            <I32>10</I32>
+            <I32>26</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="16">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">dllhost</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\WINDOWS\system32\DllHost.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="17">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>6596</I32>
+            <I32>7864</I32>
+            <I32>11440</I32>
+            <I32>13544</I32>
+            <I32>13636</I32>
+            <I32>21656</I32>
+            <I32>23436</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="18">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>4</I32>
+            <I32>7</I32>
+            <I32>2</I32>
+            <I32>7</I32>
+            <I32>3</I32>
+            <I32>2</I32>
+            <I32>14</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="19">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">backgroundTaskHost</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\WINDOWS\system32\backgroundTaskHost.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="20">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>20560</I32>
+            <I32>30372</I32>
+            <I32>34124</I32>
+            <I32>41452</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="21">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>9</I32>
+            <I32>14</I32>
+            <I32>12</I32>
+            <I32>11</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="22">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">conhost</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Microsoft Corporation</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\WINDOWS\system32\conhost.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="23">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>4384</I32>
+            <I32>7292</I32>
+            <I32>7520</I32>
+            <I32>11508</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="24">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>2</I32>
+            <I32>4</I32>
+            <I32>4</I32>
+            <I32>2</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="25">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">nvcontainer</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <Ref N="Value" RefId="7" />
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Program Files\NVIDIA Corporation\NvContainer\nvcontainer.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="26">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>4860</I32>
+            <I32>7916</I32>
+            <I32>9088</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="27">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>36</I32>
+            <I32>17</I32>
+            <I32>29</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+  <Obj RefId="28">
+    <TNRef RefId="0" />
+    <DCT>
+      <En>
+        <S N="Key">Name</S>
+        <S N="Value">RtkAudUService64</S>
+      </En>
+      <En>
+        <S N="Key">Company</S>
+        <S N="Value">Realtek Semiconductor</S>
+      </En>
+      <En>
+        <S N="Key">Path</S>
+        <S N="Value">C:\Windows\System32\DriverStore\FileRepository\realtekservice.inf_amd64_5e142737be80cf43\RtkAudUService64.exe</S>
+      </En>
+      <En>
+        <S N="Key">Id</S>
+        <Obj N="Value" RefId="29">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>5012</I32>
+            <I32>11692</I32>
+            <I32>13940</I32>
+          </LST>
+        </Obj>
+      </En>
+      <En>
+        <S N="Key">Thread Count</S>
+        <Obj N="Value" RefId="30">
+          <TNRef RefId="1" />
+          <LST>
+            <I32>19</I32>
+            <I32>3</I32>
+            <I32>8</I32>
+          </LST>
+        </Obj>
+      </En>
+    </DCT>
+  </Obj>
+</Objs>
