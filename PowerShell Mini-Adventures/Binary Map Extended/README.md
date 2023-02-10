@@ -49,9 +49,8 @@ These codes download the program image from its exe file location.
 ```pwsh
 $edge_icon.ToBitmap().Save("$(Get-Location)/edge_icon.ico")
 ```
-# improve the info from here on and upload onto GitHub
 
-After some digging through, it seems that svchost is the most common process, but it often lacks the company tag.
+To do some exploratory data analysis, I found that svchost is the most common process, but it often lacks the company tag.
 
 ```pwsh
 Get-Process | Sort-Object -Property Id |
@@ -79,7 +78,7 @@ This gave the output of:
 <tr><td>11</td><td>Code</td></tr>
 </table>
 
-Turns out that svchost was the only one that appeared so frequently; I'll make this a separate category and label the ones without a company as just 'other'. But some svchost processes list Microsoft as the company; so, I'll create a union of all the processes when grouped together by name (I'm assuming here that 2 different companies do not have a process with the same name) and use that as the border colour.
+Turns out that svchost was the only one that appeared so frequently; hence, I decided to add logic that would apply the same path location and company name for all svchost processes, seeing as some had this info, while others didn't. I'll create a union of all the processes when grouped together by name (I'm assuming here that 2 different companies do not have a process with the same name) and use that as the border colour.
 
 I first got the list of programs for which I needed to download the icon for:
 
