@@ -719,7 +719,8 @@ Now that I know what table we need, I can first reduce the file size, so any pro
 
 First, I looked at which tables took up most space, to get quick wins. Using the sqlite3_analyzer.exe command line tool that sqlite also provides, I found out that:
 * the database consists of 99 tables
-* the list of tables given above make up together 99.51% of the file size - though they just contain the label names. The R-tree tables for each of those tables, containing the actual data of the boundaries, interestingly only takes up the remaining 0.49%
+* the list of tables given above make up together 99.51% of the file size
+* the R-tree tables for each of those tables only takes up the remaining 0.49%
 
 Here's a sample of the output:
 <table>
@@ -848,10 +849,80 @@ This changed the ratios of the top 5 down to:
 | RTREE_PARISH_GEOMETRY_NODE | 7.8% |
 | RTREE_HIGH_WATER_GEOMETRY_ROWID | 4.6% |
 
-I thought I might as well go the whole way and remove the rtree tables for those I'm not going to use. This reduced the number of tables in the file down to 12 and the file size by 99.84% from the original! I could probably go further and remove any and all references to the deleted tables in the rows of the remaining tables, but it's diminishing returns, so I stopped here. This left the final file to a more manageable 2.25MB.
+I thought I might as well go the whole way and remove the R-tree tables for those I'm not going to use. This reduced the number of tables in the file down to 12 and the file size by 99.84% from the original! I could probably go further and remove any and all references to the deleted tables in the rows of the remaining tables, but it's diminishing returns, so I stopped here. This left the final file to a more manageable 2.25MB.
 
+At this point, I tried poking around to understand where the data for the actual boundaries were. Using the `.schema` command on the DISTRICT_BOROUGH_UNITARY table, I was able to find out that the geometry column was of type `MULTIPOLYGON` - which is not a typical sqlite datatype. After some more investigation, I realised that I also needed to load the spatialite module (a spatial extension to SQLite). Since this was my first time working in such depth with a spatial library, I looked into those rtree tables as well and learnt that those contain **R**-tree indexes (minimum bounding **r**ectangles for each of the features). These tables are used to quickly find out if a point in inside a boundary box and are helpful for spatial indexing.
+
+In order to read the MULTIPOLYGON column (which when selected only returned the string 'GP'), I had to load the SQLite extension `spatialite`. Using a combination of the `.cd` and `.load` dot commands to navigate to the dynamic linked library (DLL) folder that I downloaded from their website, I was able to import SpatiaLite SQL functions.
+
+With this, I was able to convert the data into WKT format (Well-known Text representation). I now wanted to do some transformations of this data into a format that would be easily accessible to canvas. I wanted to avoid using any third party apps to draw the data and wanted to do it using native tools if possible, as it allows me to understand the data format in detail, instead of relying on a high-level tool.
+
+The first problem with the data was that it used the British national grid reference system, giving scales in Easting and Northing. I wanted to translate this and scale this down so that the lines would fit into my canvas. The logic behind the transformations are shown in the image below.
+
+![Diagram showing the required logic to transform coordinates of raw data to fit canvas. Required transformations are y-axis flip, translate and rotate.](images/coordinate_change.svg)
+
+Due to the flipping transformation done, the Min_Y value from the table metadata above was no longer valid to translate by. The new value was calculated using the SQL code below.
+
+```SQL
+SELECT MIN(
+    ST_MINY(
+        ReflectCoords(
+            CastToSingle(geometry)
+        , 0, -1)
+    )
+) FROM district_borough_unitary;
+```
+
+However, another problem appeared when the translate and scale was done. Since the values were scaled down by a large factor and then rounded to 2 d.p. (since canvas cannot practically show higher levels of resolution), many of the values were repeated or very insignificantly close. Therefore, I wanted to simplify the shape to remove these close points and therefore reduce file size and improve rendering time.
+
+I first tried out the `RemoveRepeatedPoints` function, but the simiplification method resulted in a lot of loss of detail. Looking around the spatialite docs, I found that there was a `ST_Simplify` function available, which used the Douglas-Peuker algorithm with specified tolerance. The problem now was that you can only call ST_Simplify on type Curve (Linestring or Ring). So I had to first convert the multipolygon to a linestring. Surprisingly, there were no straight-forward functions in the docs to do so. Instead, I had to convert the data to a WKT, replace `MULTIPOLYGON` with `LINESTRING` and convert back to a linestring datatype.
+
+Now with this done, I wanted to experiment with changing the tolerance and see the effect of this. The results of my experiments are shown in the image below.
+
+![Effect of changing tolerance factor in simplification of linestring using the Douglas-Peuker algorithm.](images/dp_tolerance.png)
+
+I decided to go for tolerance of 0.01, as it held a sufficient level of detail, while reducing file size.
+
+The code used to make the data for above looked like this:
+```SQL
+WITH cte1 AS (
+    SELECT ReflectCoords(
+        CastToSingle(geometry)
+    , 0, -1) AS flipped_bdry,
+    "Name"
+    FROM district_borough_unitary
+),
+cte2 AS (
+    SELECT ScaleCoordinates(
+        ShiftCoordinates(
+            flipped_bdry, -503571.5, 200933.6227
+        )
+    , 8e-3) AS transformed_boundry,
+    "Name"
+    FROM cte1
+)
+
+SELECT
+    AsWKT(
+        ST_Simplify(
+            ST_LineStringFromText(
+                REPLACE(REPLACE(REPLACE(
+                            AsWKT(transformed_boundry, 2),
+                'POLYGON', 'LINESTRING'), '((', '('), '))', ')')
+            )
+        , 0.01)
+    , 2) AS WKT,
+    "Name"
+FROM cte2;
+```
+
+This resulted in the London basemap being drawn, as shown below.
+
+![London basemap drawn onto the canvas.](images/london_basemap.png)
+
+### Borough hover interaction
 
 
 <!-- optimise code using OffScreenCanvas & WebWorker -->
 <!-- multilayered canvas? -->
-<!-- add: tools used heading to all readme files, e.g. Javascript, sqlite here -->
+<!-- add: tools used heading to all readme files, e.g. Javascript, sqlite, imagemagick (behind the scenes, to make the images) here -->
