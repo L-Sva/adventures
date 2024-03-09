@@ -1,5 +1,8 @@
 # TfL Bus Mapping v2 - using canvas
 
+Technologies used:
+*SQLite, Spatialite, JavaScript, Canvas API, HTML*
+
 ## Motivation
 I've previously made a version of the TfL bus routes in London using svg elements, but even while compelting that project, I felt that the loading time was poor. Having become wiser in the ways of canvas, I now realise that svg quickly becomes unsuitable for a large number of elements drawn onto the screen and canvas is a more suitable option.
 
@@ -10,9 +13,6 @@ To create a bus route on a map using canvas, with interactive elements.
 
 ### Overview
 The overall steps are to first plot a basemap showing London divided into boroughs. On top of this, the bus routes need to be drawn. Then, interactivity needs to be added, whereby hovering over a certain bus route displays data about it.
-
-#### Slow loading times
-<!-- pic of times (from chrome dev tools) spent downloading and redering js and svgs, to show how loading time is slow and needs to be improved -->
 
 ### Displaying London basemap
 Just like I first did when creating v1 of the map, I need to plot a basemap of London, with borough information.
@@ -921,8 +921,92 @@ This resulted in the London basemap being drawn, as shown below.
 ![London basemap drawn onto the canvas.](images/london_basemap.png)
 
 ### Borough hover interaction
+The next step is to add a hover interaction, so that the hovered borough is highlighted and its name is shown on the screen. Though I spent some time looking around for a JS spatial library, I eventually found out that the native Canvas API already provides a `isPointInPath` method, which uses the Winding number algorithm using Skia (a complete 2D graphic library). I found this out by doing a deep dive into the [Chromium source code](https://source.chromium.org/chromium/chromium/src/+/main:third_party/skia/src/core/SkPath.cpp;l=3037;drc=f4a00cc248dd2dc8ec8759fb51620d47b5114090).
 
+With a bit of logic, I was able to code the JS to make a borough be filled in black on hover and show its name in the top right. I'll be using a similar logic for the bus routes interactivity.
 
-<!-- optimise code using OffScreenCanvas & WebWorker -->
-<!-- multilayered canvas? -->
-<!-- add: tools used heading to all readme files, e.g. Javascript, sqlite, imagemagick (behind the scenes, to make the images) here -->
+![Mouse is over a borough, which is coloured in black and text in top-right corner shows borough name of Harrow.](./images/hover.png)
+
+### Displaying bus routes
+The first step was to source the data directly from TfL. The
+[Line/Mode/bus](https://api.tfl.gov.uk/Line/Mode/bus) endpoint was used to get the list of all bus names. Then, this was passed in as a parameter in the URL to the [Line/{id}/Route](https://api.tfl.gov.uk/Line/1/Route/Sequence/all) endpoint to get the list of all stops in a bus route.
+
+There were some manual adjustments that I had to do, as some data  had multiple repeated linestrings for the same inbound/outbound route (e.g. route 63). This would not process properly, so I had to manually remove duplicate values.
+
+Once this was done, I had to project the linestrings from WGS84 to EPSG:27700, then to canvas coordinates, so it would be in the right scale and translation as the London basemap. I knew this could be done fast and easily using the Spatialite extension, so I first uploaded the JSON data into a database.
+
+The following SQL code was used to upload the data.
+
+```SQL
+CREATE TABLE busRoutes (
+    lineId VARCHAR(5),
+    lineName VARCHAR(5),
+    direction VARCHAR(10),
+    routeName TEXT,
+    linestring TEXT
+);
+INSERT INTO busRoutes SELECT
+  json_extract(value, '$.lineId'),
+  json_extract(value, '$.lineName'),
+  json_extract(value, '$.direction'),
+  json_extract(value, '$.routeName'),
+  json_extract(value, '$.linestring')
+FROM json_each(readfile('Route-Sequence.json'));
+```
+
+Then, a similar code as given above was used to process the linestrings to match the London basemap transformations.
+
+```SQL
+SELECT InitSpatialMetadata('WGS84');
+SELECT InsertEpsgSrid(27700);
+
+WITH cte0 AS (
+    SELECT ST_Transform(
+        ST_LineStringFromText(linestring, 4326), 27700
+    ) AS osgb_ls,
+    lineId,
+    lineName,
+    direction,
+    routeName
+    FROM busRoutes
+),
+cte1 AS (
+    SELECT ReflectCoords(osgb_ls, 0, -1) AS flipped_bdry,
+    lineId,
+    lineName,
+    direction,
+    routeName
+    FROM cte0
+),
+cte2 AS (
+    SELECT ScaleCoordinates(
+        ShiftCoordinates(
+            flipped_bdry, -503571.5, 200933.6227
+        )
+    , 8e-3) AS transformed_boundry,
+    lineId,
+    lineName,
+    direction,
+    routeName
+    FROM cte1
+)
+
+SELECT
+    lineId,
+    lineName,
+    direction,
+    routeName,
+    AsWKT(
+        ST_Simplify(transformed_boundry, 0.01)
+    , 2) AS WKT
+FROM cte2;
+```
+
+A quick verification was done to make sure the route was in the right orientation.
+
+![Image on left shows bus route in TfL website; image on right shows red bus route on canvas. The two routes are the same.](./images/first-bus.png)
+
+With the inbound directions in green and outbound directions in red, the combined image looks like the below.
+
+![Image showing all TfL bus routes, overlayed on top of London basemap.](./images/routes-showing.png)
+
