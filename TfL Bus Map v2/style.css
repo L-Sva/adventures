@@ -1,3 +1,26 @@
 canvas#tfl-bus-map {
     border: 1px solid black;
 }
+
+#highlight-details {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    font-size: 1.2rem;
+    width: 505px;
+    display: grid;
+
+    #borough-name {
+        grid-area: 1 / 1 / 2 / 2
+    }
+
+    #route-name {
+        text-align: end;
+        grid-area: 1 / 2 / 2 / 3
+    }
+
+    #route-details {
+        text-align: end;
+        grid-area: 2 / 2 / 3 / 3
+    }
+}

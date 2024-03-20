@@ -1,11 +1,11 @@
-'use strict';
+import Flatbush from './flatbush.js';
 
 const canvasOptions = {
     width: 520,
-    height: 450,
+    height: 500,
     basemapOffset: {
         dx: 50,
-        dy: 30
+        dy: 80
     }
 };
 
@@ -40,6 +40,9 @@ ctx.translate(
 );
 
 const boroughBoundary = new Map();
+const boroughName = document.getElementById('borough-name');
+const routeName = document.getElementById('route-name');
+const routeDetails = document.getElementById('route-details');
 
 for (const { WKT: linestring, Name } of boroughData) {
     const lines = linestring.slice(11, -1)
@@ -62,6 +65,7 @@ const routesJSON = await fetch(
 let routesData = await routesJSON.json();
 
 const busRoutes = new Map();
+const boundingBoxes = [];
 
 for (const route of routesData) {
     const lines = route.WKT.slice(11, -1)
@@ -71,6 +75,13 @@ for (const route of routesData) {
             .map(coord => +coord)
         );
 
+    const xCoords = lines.map(e => e[0]);
+    const yCoords = lines.map(e => e[1]);
+    boundingBoxes.push([
+        Math.min(...xCoords), Math.min(...yCoords),
+        Math.max(...xCoords), Math.max(...yCoords)
+    ]);
+
     ctx.strokeStyle = route.direction === 'inbound' ?
         '#006F2E' : '#E32118';
 
@@ -79,10 +90,8 @@ for (const route of routesData) {
     lines.slice(1).forEach(coords => thisPath.lineTo(...coords));
     ctx.stroke(thisPath);
 
-    busRoutes.set(route.lineId, {
+    busRoutes.set(`${route.lineName} (${route.direction})`, {
         path2d: thisPath,
-        lineName: route.lineName,
-        direction: route.direction,
         routeName: route.routeName
     });
 }
@@ -90,52 +99,79 @@ for (const route of routesData) {
 const londonBase = ctx.getImageData(
     0, 0, ctx.canvas.width, ctx.canvas.height);
 
-canvas.addEventListener('pointermove', hoverEffects);
+const FBindex = new Flatbush(busRoutes.size);
+boundingBoxes.forEach(bounds => FBindex.add(...bounds));
+FBindex.finish();
 
+let PAUSE_FLAG = false;
 let PREV_MATCH = null;
 
-function hoverEffects({ offsetX, offsetY }) {
-    const pointX = offsetX * dpr;
-    const pointY = offsetY * dpr;
+canvas.addEventListener('pointermove', hoverEffects);
+document.body.addEventListener('keydown',
+    ({ key }) => { if (key === 'Control') PAUSE_FLAG = true; }
+);
+document.body.addEventListener('keyup',
+    ({ key }) => { if (key === 'Control') PAUSE_FLAG = false; }
+);
 
-    const matchBName = detectPointInPolygon(pointX, pointY);
+function hoverEffects({ offsetX, offsetY }) {
+    if (PAUSE_FLAG) return;
+
+    const matchRoute = detectPointOnLine(offsetX, offsetY);
+    routeName.textContent = matchRoute.lineTitle ?? '';
+    routeDetails.textContent = matchRoute.routeName ?? '';
+
+    const matchBorough = detectPointInPolygon(offsetX, offsetY);
 
     // nothing matches, reset image;
-    if (PREV_MATCH !== matchBName || matchBName === null) {
+    if (PREV_MATCH !== matchBorough || matchBorough === null) {
         ctx.putImageData(londonBase, 0, 0);
 
         ctx.fillStyle = 'rgba(10, 10, 10, 0.3)';
-        ctx.fill(boroughBoundary.get(matchBName));
-        ctx.fillText(matchBName ?? '', 460, 0);
+        ctx.fill(boroughBoundary.get(matchBorough));
+        boroughName.textContent = matchBorough ?? '';
 
-        PREV_MATCH = matchBName;
+        PREV_MATCH = matchBorough;
     }
 }
 
-function detectPointInPolygon(pointX, pointY) {
-    // TODO check if point not inside canvas?
-    // find point in any of bounding boxes, then...
+function detectPointInPolygon(offsetX, offsetY) {
     const matchingBoxes = boroughBoundary;
 
     for (const [bName, bPath] of matchingBoxes) {
-        if (ctx.isPointInPath(bPath, pointX, pointY)) {
-            return bName;
-        }
+        if (ctx.isPointInPath(
+            bPath, offsetX * dpr, offsetY * dpr
+        )) return bName;
     }
 
     return null;
 }
 
-// show text outside, on overlayed DIV
+const busRouteKeys = Array.from(busRoutes.keys());
 
+function detectPointOnLine(offsetX, offsetY) {
+    const matchingIndexes = FBindex.search(
+        (offsetX - canvasOptions.basemapOffset.dx),
+        (offsetY - canvasOptions.basemapOffset.dy),
+        (offsetX - canvasOptions.basemapOffset.dx),
+        (offsetY - canvasOptions.basemapOffset.dy)
+    );
 
-// const link = document.createElement('a');
-// link.download = 'routes-showing.png';
-// link.href = canvas.toDataURL();
-// link.click();
+    const matchingBoxes = matchingIndexes
+        .map(idx => busRouteKeys.at(idx))
+        .map(key => [key, busRoutes.get(key)]);
+
+    for (const [lineTitle, {
+        path2d: rPath, routeName
+    }] of matchingBoxes) {
+        if (ctx.isPointInStroke(
+            rPath, offsetX * dpr, offsetY * dpr
+        )) return { lineTitle, routeName };
+    }
+
+    return { lineTitle: null, routeName: null };
+}
+
 
 // optimise code using OffScreenCanvas & WebWorker
-// multilayered canvas?
 // loading screen - see London boroughs being drawn real-time as data gets fetched?
-
-// add: tools used heading to all readme files, e.g. Javascript, sqlite, imagemagick (behind the scenes, to make the images) here
