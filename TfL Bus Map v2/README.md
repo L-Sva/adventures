@@ -1,7 +1,7 @@
 # TfL Bus Mapping v2 - using canvas
 
 Technologies used:
-*SQLite, Spatialite, JavaScript, Canvas API, HTML*
+*SQLite, Spatialite, JavaScript, Canvas API, HTML, ImageMagick, FFmpeg*
 
 ## Motivation
 I've previously made a version of the TfL bus routes in London using svg elements, but even while compelting that project, I felt that the loading time was poor. Having become wiser in the ways of canvas, I now realise that svg quickly becomes unsuitable for a large number of elements drawn onto the screen and canvas is a more suitable option.
@@ -19,13 +19,15 @@ Just like I first did when creating v1 of the map, I need to plot a basemap of L
 
 But before doing this, as I was already aware of poor image quality with canvas, especially when zooming in, I created some code to change the devicePixelRatio (dpr) of the canvas, which in effect means uses a larger canvas size, but then rescaling it using CSS to its original size. This has the effect of making text and edges sharper, as seen in the image below.
 
-![Image showing how varying dpr makes text look sharper. dpr=1 makes the text quite blurry when zoomed in; from dpr=4, not any noticeable improvement. At dpr=20 and dpr=30, text seems to have a strange aliasing effect.](images/dpr_change_effects.png)
+Notice how increasing the dpr makes the text look sharper. dpr=1 makes the text quite blurry when zoomed in; from dpr=4, not any noticeable improvement. At dpr=20 and dpr=30, text seems to have a strange aliasing effect.
+
+![Effect on text clarity of increasing dpr. Text becomes increasing clearer as dpr increased.](./images/dpr_change_effects.png)
 
 Higher dpr does make the page load slower, so I compromised at dpr=4, as the quality of the render does not significantly improve at higher numbers than that.
 
 This time, I wanted to get the borough data from official sources. Therefore, I researched and ended up installing the latest data from [Ordnance Survey OpenData](https://osdatahub.os.uk/downloads/open/BoundaryLine) in a GeoPackage format. This file is a whopping 1.42 GB! So the first thing I needed to do was extract out of this file only the London data I would be using. A bit more research on Google led me to find out that a GeoPackage file is simply an SQLite Database file with a .gpkg extension, so I first queried it using the sqlite3 command line tool.
 
-![Output on Windows Terminal, showing the list of tables in the database.](images/sqlite_output.png)
+![Output on Windows Terminal, showing the list of tables in the database.](./images/sqlite_output.png)
 
 This image from the official geopackage website shows this entity relation diagram, which shows that the gpkg_contents table contains a list of all the table names. It outputs the following list (`SELECT GROUP_CONCAT(table_name) FROM gpkg_contents;`):
 * boundary_line_ceremonial_counties
@@ -859,7 +861,7 @@ With this, I was able to convert the data into WKT format (Well-known Text repre
 
 The first problem with the data was that it used the British national grid reference system, giving scales in Easting and Northing. I wanted to translate this and scale this down so that the lines would fit into my canvas. The logic behind the transformations are shown in the image below.
 
-![Diagram showing the required logic to transform coordinates of raw data to fit canvas. Required transformations are y-axis flip, translate and rotate.](images/coordinate_change.svg)
+![Diagram showing the required logic to transform coordinates of raw data to fit canvas. Required transformations are y-axis flip, translate and rotate.](./images/coordinate_change.svg)
 
 Due to the flipping transformation done, the Min_Y value from the table metadata above was no longer valid to translate by. The new value was calculated using the SQL code below.
 
@@ -877,9 +879,9 @@ However, another problem appeared when the translate and scale was done. Since t
 
 I first tried out the `RemoveRepeatedPoints` function, but the simiplification method resulted in a lot of loss of detail. Looking around the spatialite docs, I found that there was a `ST_Simplify` function available, which used the Douglas-Peuker algorithm with specified tolerance. The problem now was that you can only call ST_Simplify on type Curve (Linestring or Ring). So I had to first convert the multipolygon to a linestring. Surprisingly, there were no straight-forward functions in the docs to do so. Instead, I had to convert the data to a WKT, replace `MULTIPOLYGON` with `LINESTRING` and convert back to a linestring datatype.
 
-Now with this done, I wanted to experiment with changing the tolerance and see the effect of this. The results of my experiments are shown in the image below.
+Now with this done, I wanted to experiment with changing the tolerance and see the effect of this. The results of my experiments are shown in the image below. It shows the effect of changing tolerance factor in simplification of linestring using the Douglas-Peuker algorithm.
 
-![Effect of changing tolerance factor in simplification of linestring using the Douglas-Peuker algorithm.](images/dp_tolerance.png)
+![Image shows various boundary lines for increasing tolerance. The shape becomes increasingly simplified as tolerance is increased.](./images/dp_tolerance.png)
 
 I decided to go for tolerance of 0.01, as it held a sufficient level of detail, while reducing file size.
 
@@ -918,7 +920,7 @@ FROM cte2;
 
 This resulted in the London basemap being drawn, as shown below.
 
-![London basemap drawn onto the canvas.](images/london_basemap.png)
+![London basemap drawn onto the canvas.](./images/london_basemap.png)
 
 ### Borough hover interaction
 The next step is to add a hover interaction, so that the hovered borough is highlighted and its name is shown on the screen. Though I spent some time looking around for a JS spatial library, I eventually found out that the native Canvas API already provides a `isPointInPath` method, which uses the Winding number algorithm using Skia (a complete 2D graphic library). I found this out by doing a deep dive into the [Chromium source code](https://source.chromium.org/chromium/chromium/src/+/main:third_party/skia/src/core/SkPath.cpp;l=3037;drc=f4a00cc248dd2dc8ec8759fb51620d47b5114090).
@@ -1009,4 +1011,22 @@ A quick verification was done to make sure the route was in the right orientatio
 With the inbound directions in green and outbound directions in red, the combined image looks like the below.
 
 ![Image showing all TfL bus routes, overlayed on top of London basemap.](./images/routes-showing.png)
+
+### Bus route interaction
+The next step was to add interaction to the bus routes on hover. However, applying the same logic as for the boroughs (where all boroughs are looped to find overlap with mouse pointer), made the interaction extremely slow, as the expensive `isPointInStroke` had to be called for almost all 1348 routes before finding a match.
+
+Therefore, I decided to add in a spatial index to reduce the number of matches, based on rectangular boundary boxes. I implemented this using the `flatbush` JS library, which used the bounding boxes as shown in the image below.
+
+![Bounding boxes of each bus route in blue](./images/bboxes_outline.png)
+
+An additional change I made was to show the details text in a `div` overlaying the canvas instead as text inside the canvas. This is because html text zooms better and looks sharper.
+
+You can see how much improvement using a spatial index made to the interactivity of the map. The image below shows how many expensive function calls are being made on each pointermove event without (left) and with (right) a spatial index to first filter out matches. You can even see how the code is so slow, it doesn't even have time to highlight the underlying borough when unoptimised.
+
+![Animation showing how slow code is without a spatial index (left) and with (right).](./images/flatbrush_optimisation.webp)
+
+### Speeding up First Contentful Paint (FCP)
+As a final optimisation, I wanted to look into
+According to this [web.dev article on FCP](https://web.dev/articles/fcp):
+> Good FCP values are 1.8 seconds or less. Poor values are greater than 3.0 seconds.
 
