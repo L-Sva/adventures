@@ -1,5 +1,8 @@
 # TfL Bus Mapping
 
+Technologies used:
+*JavaScript, GeoJSON, D3.js, HTML*
+
 ## Motivation
 I like to go on walks in the forests/woods surrounding London in the summer when the weather is nice. So, I try to get as far away from my house (and London) by using TfL buses. Thus, I found that it would have been useful to have a map of all the bus routes and what areas they cover to know which area I should explore next. Thus, the idea for this project was born.
 
