@@ -1025,8 +1025,7 @@ You can see how much improvement using a spatial index made to the interactivity
 
 ![Animation showing how slow code is without a spatial index (left) and with (right).](./images/flatbrush_optimisation.webp)
 
-### Speeding up First Contentful Paint (FCP)
-As a final optimisation, I wanted to look into
-According to this [web.dev article on FCP](https://web.dev/articles/fcp):
-> Good FCP values are 1.8 seconds or less. Poor values are greater than 3.0 seconds.
+## Summary
+With this final addition, the version 2 of the London bus route is complete. The interactivity is smooth, the data is shown nicely and the data has been compressed to a manageable volume. The final map looks like the following, with my favourite bus route highlighted using the mouse pointer.
 
+![Image showing the total canvas map. The SL9 route is highlighted.](./images/bus_route_v2_final.png)
