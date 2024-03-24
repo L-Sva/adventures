@@ -9,6 +9,7 @@ A repo to hold all my side projects that I work on.
 | [TfL Bus Map v2](TfL%20Bus%20Map%20v2) | Mar 2024 |
 
 ## Montage of results
-<img src="https://github.com/L-Sva/adventures/blob/main/TfL%20Bus%20Map/images/map_final.svg" width=33%>
-
-<!-- use relative path for image instead and change to use flexbox instead -->
+<div id="project-images">
+<img src="https://github.com/L-Sva/adventures/blob/main/TfL%20Bus%20Map/images/map_final.png" width=33%>
+<img src="./TfL Bus Map v2/images/bus_route_v2_final.png" width=33%>
+</div>
