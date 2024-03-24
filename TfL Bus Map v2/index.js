@@ -104,7 +104,8 @@ boundingBoxes.forEach(bounds => FBindex.add(...bounds));
 FBindex.finish();
 
 let PAUSE_FLAG = false;
-let PREV_MATCH = null;
+let PREV_ROUTE_MATCH = null;
+let PREV_BOROUGH_MATCH = null;
 
 canvas.addEventListener('pointermove', hoverEffects);
 document.body.addEventListener('keydown',
@@ -118,20 +119,34 @@ function hoverEffects({ offsetX, offsetY }) {
     if (PAUSE_FLAG) return;
 
     const matchRoute = detectPointOnLine(offsetX, offsetY);
-    routeName.textContent = matchRoute.lineTitle ?? '';
-    routeDetails.textContent = matchRoute.routeName ?? '';
-
     const matchBorough = detectPointInPolygon(offsetX, offsetY);
 
-    // nothing matches, reset image;
-    if (PREV_MATCH !== matchBorough || matchBorough === null) {
+    if (PREV_ROUTE_MATCH !== matchRoute.lineTitle ||
+        PREV_BOROUGH_MATCH !== matchBorough) {
         ctx.putImageData(londonBase, 0, 0);
 
-        ctx.fillStyle = 'rgba(10, 10, 10, 0.3)';
-        ctx.fill(boroughBoundary.get(matchBorough));
+        if (matchRoute.lineTitle) {
+            ctx.strokeStyle = 'black';
+            ctx.lineWidth = 3;
+            ctx.stroke(
+                busRoutes.get(matchRoute.lineTitle).path2d
+            );
+        }
+
+        routeName.textContent = matchRoute.lineTitle ?? '';
+        routeDetails.textContent = matchRoute.routeName ?? '';
+
+        PREV_ROUTE_MATCH = matchRoute.lineTitle;
+
+
+        if (matchBorough) {
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.3)';
+            ctx.fill(boroughBoundary.get(matchBorough));
+        }
+
         boroughName.textContent = matchBorough ?? '';
 
-        PREV_MATCH = matchBorough;
+        PREV_BOROUGH_MATCH = matchBorough;
     }
 }
 
@@ -161,6 +176,9 @@ function detectPointOnLine(offsetX, offsetY) {
         .map(idx => busRouteKeys.at(idx))
         .map(key => [key, busRoutes.get(key)]);
 
+    // temporarily increase stroke/hitbox to increase tolerance
+    // ctx.lineWidth = 2;
+
     for (const [lineTitle, {
         path2d: rPath, routeName
     }] of matchingBoxes) {
@@ -171,7 +189,3 @@ function detectPointOnLine(offsetX, offsetY) {
 
     return { lineTitle: null, routeName: null };
 }
-
-
-// optimise code using OffScreenCanvas & WebWorker
-// loading screen - see London boroughs being drawn real-time as data gets fetched?
